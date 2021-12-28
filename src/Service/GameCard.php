@@ -64,7 +64,7 @@ class GameCard
         return $price;
     }
 
-    public function statutOrdered(Command $command): bool
+    public function isTheCommandInProgress(Command $command): bool
     {
         /** @var Status */
         $status = $command->getStatus();

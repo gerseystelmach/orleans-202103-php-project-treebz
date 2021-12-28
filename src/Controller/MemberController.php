@@ -44,7 +44,7 @@ class MemberController extends AbstractController
             $this->addFlash('danger', $e->getMessage());
         }
 
-        if ($gameCard->statutOrdered($command) === false) {
+        if ($gameCard->isTheCommandInProgress($command) === false) {
             $this->addFlash('danger', "La commande est déjà validée, vous ne pouvez plus la modifier");
         }
 
@@ -52,7 +52,7 @@ class MemberController extends AbstractController
             'command' => $command,
             'members' => $memberRepository->findBy(['command' => $command->getId()], ['cardNumber' => 'ASC']),
             'priceGame' => $priceGame,
-            'statusOrdered' => $gameCard->statutOrdered($command),
+            'statusOrdered' => $gameCard->isTheCommandInProgress($command),
         ]);
     }
 
@@ -69,7 +69,7 @@ class MemberController extends AbstractController
         if (!$user->getCommands()->contains($command)) {
             throw $this->createAccessDeniedException("Vous n'avez pas accès à cette commande");
         }
-        if ($gameCard->statutOrdered($command) === false) {
+        if ($gameCard->isTheCommandInProgress($command) === false) {
             throw $this->createAccessDeniedException("La commande est déjà validée, vous ne pouvez plus la modifier");
         }
 
@@ -113,7 +113,7 @@ class MemberController extends AbstractController
         GameCard $gameCard
     ): Response {
 
-        if ($gameCard->statutOrdered($command) === false) {
+        if ($gameCard->isTheCommandInProgress($command) === false) {
             throw $this->createAccessDeniedException("La commande est déjà validée, vous ne pouvez plus la modifier");
         }
         /**
